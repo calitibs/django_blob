@@ -1,0 +1,50 @@
+{% extends 'demo_base.html' %}
+{% block title %}
+    文章列表
+{% endblock %}
+
+{% block bodyblock %}
+    <h1 style="margin-left: 100px">文章列表</h1>
+    <table width="400px">
+        <thead style="font-size:20px">
+            <tr>
+                <th>标题</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+    <tbody>
+{#    page 遍历当前页面#}
+    {% for blog in pages %}
+        <tr>
+            <th><a href="{% url 'blog_detail' blog.id %}">{{ blog.title }}</a></th>
+            <th><a href="{% url 'blog_update' blog.id %}">编辑</a> | <a href="{% url 'blog_delete' blog.id %}">删除 </a></th>
+        </tr>
+    {% endfor %}
+    </tbody>
+    </table>
+
+  有没有上一页
+    {% if pages.has_previous %}
+        <a href="{% url 'blog_list' %}?page={{ pages.pervious_page_number }}">上一页</a>
+    {% endif %}
+
+ 当前页
+    {{ pages.number }}/{{ pages.paginator.num_pages }}
+    {% for num in pages.paginator.page_range %}
+        {% if num == pages.number %}
+            <a href="{% url 'blog_list' %}?page={{ num }}" style="font-size: 30px">{{ num }}</a>
+        {% else %}
+            <a href="{% url 'blog_list' %}?page={{ num }}">{{ num }}</a>
+        {% endif %}
+    {% endfor %}
+
+
+  有没有下一页
+    {% if pages.has_next %}
+        <a href="{% url 'blog_list' %}?page={{ pages.next_page_number }}">下一页</a>
+        {% else %}
+            <script>
+                alert('这已经是最后一页')
+            </script>
+    {% endif %}
+{% endblock %}
